@@ -289,43 +289,47 @@ namespace Mono.Net.Security
 					wantsChain = true;
 			}
 
-			if (wantsChain)
-				chain = SystemCertificateValidator.CreateX509Chain (certs);
-
 			bool providerValidated = false;
 			if (provider != null && provider.HasCustomSystemCertificateValidator) {
 				var xerrors = (MonoSslPolicyErrors)errors;
-				var xchain = (XX509Chain)(object)chain;
-				providerValidated = provider.InvokeSystemCertificateValidator (this, host, server, certs, ref xchain, out result, ref xerrors, ref status11);
+				XX509Chain xchain;
+				providerValidated = provider.InvokeSystemCertificateValidator (this, host, server, certs, wantsChain, out xchain, out result, ref xerrors, ref status11);
 				chain = (X509Chain)(object)xchain;
 				errors = (SslPolicyErrors)xerrors;
+			} else if (wantsChain) {
+				chain = SystemCertificateValidator.CreateX509Chain (certs);
 			}
 
-			if (!providerValidated)
-				result = SystemCertificateValidator.Evaluate (settings, host, certs, chain, ref errors, ref status11);
+			try {
+				if (!providerValidated)
+					result = SystemCertificateValidator.Evaluate (settings, host, certs, chain, ref errors, ref status11);
 
-			if (policy != null && (!(policy is DefaultCertificatePolicy) || certValidationCallback == null)) {
-				ServicePoint sp = null;
-				if (request != null)
-					sp = request.ServicePointNoLock;
-				if (status11 == 0 && errors != 0) {
-					// TRUST_E_FAIL
-					status11 = unchecked ((int)0x800B010B);
+				if (policy != null && (!(policy is DefaultCertificatePolicy) || certValidationCallback == null)) {
+					ServicePoint sp = null;
+					if (request != null)
+						sp = request.ServicePointNoLock;
+					if (status11 == 0 && errors != 0) {
+						// TRUST_E_FAIL
+						status11 = unchecked ((int)0x800B010B);
+					}
+
+					// pre 2.0 callback
+					result = policy.CheckValidationResult (sp, leaf, request, status11);
+					user_denied = !result && !(policy is DefaultCertificatePolicy);
 				}
-
-				// pre 2.0 callback
-				result = policy.CheckValidationResult (sp, leaf, request, status11);
-				user_denied = !result && !(policy is DefaultCertificatePolicy);
+				// If there's a 2.0 callback, it takes precedence
+				if (hasCallback) {
+					if (callbackWrapper != null)
+						result = callbackWrapper.Invoke (certValidationCallback, leaf, chain, (MonoSslPolicyErrors)errors);
+					else
+						result = certValidationCallback.Invoke (sender, leaf, chain, errors);
+					user_denied = !result;
+				}
+				return new ValidationResult (result, user_denied, status11, (MonoSslPolicyErrors)errors);
+			} finally {
+				if (chain != null)
+					chain.Dispose ();
 			}
-			// If there's a 2.0 callback, it takes precedence
-			if (hasCallback) {
-				if (callbackWrapper != null)
-					result = callbackWrapper.Invoke (certValidationCallback, leaf, chain, (MonoSslPolicyErrors)errors);
-				else
-					result = certValidationCallback.Invoke (sender, leaf, chain, errors);
-				user_denied = !result;
-			}
-			return new ValidationResult (result, user_denied, status11, (MonoSslPolicyErrors)errors);
 		}
 
 		public bool InvokeSystemValidator (string targetHost, bool serverMode, XX509CertificateCollection certificates, XX509Chain xchain, ref MonoSslPolicyErrors xerrors, ref int status11)
