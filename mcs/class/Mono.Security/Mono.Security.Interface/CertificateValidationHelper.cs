@@ -99,7 +99,7 @@ namespace Mono.Security.Interface
 		/*
 		 * Internal use only.
 		 */
-		ValidationResult ValidateCertificate (string targetHost, bool serverMode, X509Chain chain);
+		ValidationResult ValidateCertificate (string targetHost, bool serverMode, X509Certificate leaf, X509Chain chain);
 
 		/*
 		 * On OS X and Mobile, the @chain will be initialized with the @certificates, but not actually built.
