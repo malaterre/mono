@@ -144,7 +144,7 @@ namespace Mono.Security.Interface
 		 */
 		public virtual bool InvokeSystemCertificateValidator (
 			ICertificateValidator validator, string targetHost, bool serverMode,
-			X509CertificateCollection certificates, bool wantsChain, out X509Chain chain,
+			X509CertificateCollection certificates, bool wantsChain, ref X509Chain chain,
 			out bool success, ref MonoSslPolicyErrors errors, ref int status11)
 		{
 			throw new InvalidOperationException ();
