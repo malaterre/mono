@@ -2478,7 +2478,6 @@ dump_sample_hits (MonoProfiler *prof, StatBuffer *sbuf)
 			void *address = (void*)managed_sample_base [i * 4 + 2];
 
 			if (!method) {
-				g_assert (domain);
 				MonoJitInfo *ji = mono_jit_info_table_find (domain, (char *)address);
 
 				if (ji)
