@@ -143,7 +143,7 @@ namespace Mono.Security.Interface
 		 * default system validator.
 		 */
 		internal virtual bool InvokeSystemCertificateValidator (
-			ICertificateValidator validator, string targetHost, bool serverMode,
+			ICertificateValidator2 validator, string targetHost, bool serverMode,
 			X509CertificateCollection certificates, bool wantsChain, ref X509Chain chain,
 			out bool success, ref MonoSslPolicyErrors errors, ref int status11)
 		{
