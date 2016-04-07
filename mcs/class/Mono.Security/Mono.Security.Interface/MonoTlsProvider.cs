@@ -31,6 +31,7 @@ using System.Net.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using Mono.Security.Protocol.Tls;
+using Mono.Net.Security;
 
 namespace Mono.Security.Interface
 {
@@ -121,6 +122,26 @@ namespace Mono.Security.Interface
 		public abstract IMonoSslStream CreateSslStream (
 			Stream innerStream, bool leaveInnerStreamOpen,
 			MonoTlsSettings settings = null);
+
+#endregion
+
+#region Native Certificate Implementation
+
+		internal virtual bool HasNativeCertificates {
+			get { return false; }
+		}
+
+		internal virtual X509Certificate2Impl GetNativeCertificate (
+			byte[] data, string password, X509KeyStorageFlags flags)
+		{
+			throw new InvalidOperationException ();
+		}
+
+		internal virtual X509Certificate2Impl GetNativeCertificate (
+			X509Certificate certificate)
+		{
+			throw new InvalidOperationException ();
+		}
 
 #endregion
 
