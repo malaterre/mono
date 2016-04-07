@@ -74,7 +74,7 @@ namespace Mono.Net.Security
 {
 	internal delegate bool ServerCertValidationCallbackWrapper (ServerCertValidationCallback callback, X509Certificate certificate, X509Chain chain, MonoSslPolicyErrors sslPolicyErrors);
 
-	internal class ChainValidationHelper : ICertificateValidator
+	internal class ChainValidationHelper : ICertificateValidator2
 	{
 		readonly object sender;
 		readonly MonoTlsSettings settings;
