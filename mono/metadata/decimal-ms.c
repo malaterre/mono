@@ -2178,7 +2178,7 @@ mono_decimal_compare (MonoDecimal *left, MonoDecimal *right)
 {
 	uint32_t   left_sign;
 	uint32_t   right_sign;
-	MonoDecimal result;
+	MonoDecimal result = {0};
 
 	result.Hi32 = 0; 	// Just to shut up the compiler
 

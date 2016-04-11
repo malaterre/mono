@@ -65,7 +65,7 @@
    block.
 
    For now we will disable this. */
-#define MONO_TLS_FAST
+#define MONO_TLS_FAST __attribute__((tls_model("local-dynamic")))
 #else
 #define MONO_TLS_FAST __attribute__((tls_model("local-dynamic")))
 #endif

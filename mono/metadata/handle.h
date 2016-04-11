@@ -104,7 +104,7 @@ mono_handle_elevate (MonoHandle handle)
 #else
 
 static inline void
-mono_handle_check_in_critical_section ()
+mono_handle_check_in_critical_section (void)
 {
 	MONO_REQ_GC_CRITICAL;
 }

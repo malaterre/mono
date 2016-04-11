@@ -556,6 +556,7 @@ InterlockedCompareExchange64(volatile gint64 *dest, gint64 exch, gint64 comp)
 #endif
 
 #else
+/*
 
 gint64
 InterlockedCompareExchange64(volatile gint64 *dest, gint64 exch, gint64 comp)
@@ -580,6 +581,7 @@ InterlockedCompareExchange64(volatile gint64 *dest, gint64 exch, gint64 comp)
 
 	return(old);
 }
+*/
 
 #endif
 

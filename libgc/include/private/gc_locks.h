@@ -161,6 +161,7 @@
 #      define GC_TEST_AND_SET_DEFINED
 #    endif
 #    if defined(POWERPC)
+#if 0
         inline static int GC_test_and_set(volatile unsigned int *addr) {
           int oldval;
           int temp = 1; /* locked value */
@@ -183,6 +184,18 @@
 	__asm__ __volatile__("lwsync" : : : "memory");
         *(addr) = 0;
       }
+#else
+        inline static int GC_test_and_set(volatile unsigned int *addr) {
+		  return (int) __sync_lock_test_and_set (addr, 1);
+        }
+#       define GC_TEST_AND_SET_DEFINED
+      inline static void GC_clear(volatile unsigned int *addr) {
+		  __sync_synchronize ();
+
+		  *(addr) = 0;
+      }
+
+#endif
 #     define GC_CLEAR_DEFINED
 #    endif
 #    if defined(ALPHA) 
@@ -321,9 +334,11 @@
 #  if defined(_AIX)
 #    include <sys/atomic_op.h>
 #    if (defined(_POWER) || defined(_POWERPC)) 
+#error
 #      if defined(__GNUC__)  
          inline static void GC_memsync() {
-           __asm__ __volatile__ ("sync" : : : "memory");
+//           __asm__ __volatile__ ("sync" : : : "memory");
+__sync_synchronize();
          }
 #      else
 #        ifndef inline
@@ -462,6 +477,7 @@
 #         if HAS___SYNC_BOOL_COMPARE_AND_SWAP
             return __sync_bool_compare_and_swap(addr, old, new_val);
 #         else
+#error
             unsigned long result, dummy;
             __asm__ __volatile__(
                 "1:\tldarx %0,0,%5\n"
@@ -488,6 +504,7 @@
 #         if HAS___SYNC_BOOL_COMPARE_AND_SWAP
             return __sync_bool_compare_and_swap(addr, old, new_val);
 #         else
+#error
             int result, dummy;
             __asm__ __volatile__(
                 "1:\tlwarx %0,0,%5\n"
@@ -510,7 +527,8 @@
 #      endif /* !GENERIC_COMPARE_AND_SWAP */
         inline static void GC_memory_barrier()
         {
-            __asm__ __volatile__("sync" : : : "memory");
+        //    __asm__ __volatile__("sync" : : : "memory");
+__sync_synchronize();
         }
 #     endif /* POWERPC */
 

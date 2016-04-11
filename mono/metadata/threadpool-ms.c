@@ -1410,7 +1410,7 @@ gboolean
 mono_threadpool_ms_remove_domain_jobs (MonoDomain *domain, int timeout)
 {
 	gboolean res = TRUE;
-	guint32 start;
+	guint32 start = 0;
 	gpointer sem;
 
 	g_assert (domain);

@@ -112,7 +112,7 @@ mono_threads_state_poll (void)
 }
 
 static void *
-return_stack_ptr ()
+return_stack_ptr (void)
 {
 	gpointer i;
 	return &i;

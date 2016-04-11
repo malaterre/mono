@@ -534,7 +534,8 @@ mono_release_type_locks (MonoInternalThread *thread)
 	MONO_REQ_GC_UNSAFE_MODE;
 
 	mono_type_initialization_lock ();
-	g_hash_table_foreach_remove (type_initialization_hash, release_type_locks, GUINT_TO_POINTER (thread->tid));
+	guint32 tid = thread->tid;
+	g_hash_table_foreach_remove (type_initialization_hash, release_type_locks, GUINT_TO_POINTER (tid));
 	mono_type_initialization_unlock ();
 }
 

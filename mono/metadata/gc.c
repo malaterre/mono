@@ -922,7 +922,8 @@ mono_gc_cleanup (void)
 				ret = guarded_wait (gc_thread->handle, INFINITE, TRUE);
 				g_assert (ret == WAIT_OBJECT_0);
 
-				mono_thread_join (GUINT_TO_POINTER (gc_thread->tid));
+				guint32 tid = gc_thread->tid;
+				mono_thread_join (GUINT_TO_POINTER (tid));
 			}
 			g_assert (finalizer_thread_exited);
 		}

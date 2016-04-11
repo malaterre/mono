@@ -1336,7 +1336,7 @@ arch_emit_got_access (MonoAotCompile *acfg, const char *got_symbol, guint8 *code
 #elif defined(TARGET_POWERPC)
 	{
 		guint8 buf [32];
-		guint8 *code;
+		guint8 *code = 0;
 
 		emit_bytes (acfg, code, mono_arch_get_patch_offset (code));
 		code = buf;

@@ -31,7 +31,7 @@
 #include <glib.h>
 #include <mono/utils/mono-publib.h>
 
-//#define QUEUE_DEBUG	1
+#define QUEUE_DEBUG	1
 
 typedef struct _MonoLockFreeQueueNode MonoLockFreeQueueNode;
 

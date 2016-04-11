@@ -150,7 +150,10 @@ mono_lls_insert (MonoLinkedListSet *list, MonoThreadHazardPointers *hp, MonoLink
 	MonoLinkedListSetNode *cur, **prev;
 	/*We must do a store barrier before inserting 
 	to make sure all values in @node are globally visible.*/
+        int k;
+        k = 42;
 	mono_memory_barrier ();
+        k++;
 
 	while (1) {
 		if (mono_lls_find (list, hp, value->key, context))

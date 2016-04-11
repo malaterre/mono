@@ -52,7 +52,7 @@ mono_mb_create_method (MonoMethodBuilder *mb, MonoMethodSignature *signature, in
 guint32
 mono_mb_add_data (MonoMethodBuilder *mb, gpointer data);
 
-#ifndef DISABLE_JIT
+//#ifndef DISABLE_JIT
 void
 mono_mb_patch_addr (MonoMethodBuilder *mb, int pos, int value);
 
@@ -155,7 +155,7 @@ mono_mb_set_clauses (MonoMethodBuilder *mb, int num_clauses, MonoExceptionClause
 void
 mono_mb_set_param_names (MonoMethodBuilder *mb, const char **param_names);
 
-#endif
+//#endif
 
 G_END_DECLS
 

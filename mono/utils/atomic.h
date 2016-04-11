@@ -273,11 +273,12 @@ static inline void InterlockedWrite(volatile gint32 *dst, gint32 val)
 	} while (__sync_val_compare_and_swap (dst, old_val, val) != old_val);
 }
 
-#if defined (TARGET_OSX) || defined (__arm__) || (defined (__mips__) && !defined (__mips64)) || (defined (__powerpc__) && !defined (__powerpc64__)) || (defined (__sparc__) && !defined (__arch64__))
-#define BROKEN_64BIT_ATOMICS_INTRINSIC 1
-#endif
+//#if defined (TARGET_OSX) || defined (__arm__) || (defined (__mips__) && !defined (__mips64)) || (defined (__powerpc__) && !defined (__powerpc64__)) || (defined (__sparc__) && !defined (__arch64__))
+//#define BROKEN_64BIT_ATOMICS_INTRINSIC 1
+//#endif
 
-#if !defined (BROKEN_64BIT_ATOMICS_INTRINSIC)
+
+#if 0 // !defined (BROKEN_64BIT_ATOMICS_INTRINSIC)
 
 static inline gint64 InterlockedCompareExchange64(volatile gint64 *dest, gint64 exch, gint64 comp)
 {
@@ -310,8 +311,49 @@ static inline gint64 InterlockedRead64(volatile gint64 *src)
 	return __sync_fetch_and_add (src, 0);
 }
 
-#else
+#elif defined(__powerpc__)
+static inline gint64 InterlockedCompareExchange64(volatile gint64 *dest, gint64 exch, gint64 comp)
+{
+//	return __sync_val_compare_and_swap (dest, comp, exch);
+  __atomic_compare_exchange(dest, &comp, &exch, 0, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
+  return comp;
+}
 
+static inline gint64 InterlockedAdd64(volatile gint64 *dest, gint64 add)
+{
+//	return __sync_add_and_fetch (dest, add);
+    return __atomic_add_fetch(dest, add, __ATOMIC_SEQ_CST);      
+}
+
+static inline gint64 InterlockedIncrement64(volatile gint64 *val)
+{
+//	return __sync_add_and_fetch (val, 1);
+    return __atomic_add_fetch(val, 1, __ATOMIC_SEQ_CST);      
+}
+
+static inline gint64 InterlockedDecrement64(volatile gint64 *val)
+{
+//	return __sync_sub_and_fetch (val, 1);
+    return __atomic_sub_fetch(val, 1, __ATOMIC_SEQ_CST);      
+}
+
+static inline gint64 InterlockedExchangeAdd64(volatile gint64 *val, gint64 add)
+{
+//	return __sync_fetch_and_add (val, add);
+    return __atomic_fetch_add(val, add, __ATOMIC_SEQ_CST);      
+}
+
+static inline gint64 InterlockedRead64(volatile gint64 *src)
+{
+	/* Kind of a hack, but GCC doesn't give us anything better. */
+//	return __sync_fetch_and_add (src, 0);
+    return __atomic_fetch_add(src, 0, __ATOMIC_SEQ_CST);      
+
+}
+
+
+#else
+#error
 /* Implement 64-bit cmpxchg by hand or emulate it. */
 extern gint64 InterlockedCompareExchange64(volatile gint64 *dest, gint64 exch, gint64 comp);
 
@@ -417,7 +459,7 @@ static inline gint32 InterlockedCompareExchange(gint32 volatile *dest,
 
 	return(old);
 }
-
+#error
 static inline gpointer InterlockedCompareExchangePointer(gpointer volatile *dest,
 						gpointer exch, gpointer comp)
 {

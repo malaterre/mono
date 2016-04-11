@@ -2689,6 +2689,7 @@ mono_jit_runtime_invoke (MonoMethod *method, void *obj, void **params, MonoObjec
 		return mono_llvmonly_runtime_invoke (method, info, obj, params, exc, error);
 
 	runtime_invoke = (MonoObject *(*)(MonoObject *, void **, MonoObject **, void *))info->runtime_invoke;
+        //runtime_invoke = mono_create_ftnptr (mono_domain_get(), runtime_invoke);
 
 	MonoObject *result = runtime_invoke ((MonoObject *)obj, params, exc, info->compiled_method);
 	if (catchExcInMonoError && *exc != NULL)

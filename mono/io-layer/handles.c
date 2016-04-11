@@ -48,7 +48,7 @@
 #include <mono/utils/mono-threads.h>
 #include <mono/utils/mono-once.h>
 #include <mono/utils/mono-logger-internals.h>
-#undef DEBUG_REFS
+#define DEBUG_REFS
 
 static void (*_wapi_handle_ops_get_close_func (WapiHandleType type))(gpointer, gpointer);
 

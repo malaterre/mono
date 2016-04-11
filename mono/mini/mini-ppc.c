@@ -622,8 +622,8 @@ mono_arch_init (void)
 	if (!cachelineinc)
 		cachelineinc = cachelinesize;
 
-	if (mono_cpu_count () > 1)
-		cpu_hw_caps |= PPC_SMP_CAPABLE;
+	//if (mono_cpu_count () > 1)
+	//	cpu_hw_caps |= PPC_SMP_CAPABLE;
 
 	mono_os_mutex_init_recursive (&mini_arch_mutex);
 

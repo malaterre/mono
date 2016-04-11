@@ -26,7 +26,7 @@
 	 * it if it is the included one.
 	 */
 	
-#	if defined(HAVE_KW_THREAD) && !defined(__powerpc__)
+#	if defined(HAVE_KW_THREAD) /*&& !defined(__powerpc__)*/
         /* The local alloc stuff is in pthread_support.c, but solaris uses solaris_threads.c */
         /* It is also disabled on solaris/x86 by libgc/configure.ac */
         /* 

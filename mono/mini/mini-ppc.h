@@ -163,11 +163,12 @@ typedef struct MonoCompileArch {
 //  #define MONO_ARCH_HAVE_HANDLER_BLOCK_GUARD 1
 
 // Define "DEBUG_ELFABIV2" to allow for debugging output for ELF ABI v2 function call and return codegen
-//  #define DEBUG_ELFABIV2
+  #define DEBUG_ELFABIV2
 
   #define MONO_ARCH_LLVM_SUPPORTED 1
 
  #else
+  #define DEBUG_ELFABIV2
   #define PPC_STACK_PARAM_OFFSET 48
   #define PPC_MINIMAL_STACK_SIZE 48
   #define PPC_LARGEST_STRUCT_SIZE_TO_RETURN_VIA_REGISTERS 0

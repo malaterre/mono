@@ -150,6 +150,8 @@ STATE_BLOCKING_AND_SUSPENDED: This is a bug in coop x suspend that resulted the 
 	default:
 		mono_fatal_with_history ("Cannot transition current thread %p from %s with DETACH", info, state_name (cur_state));
 	}
+g_assert(0);
+return FALSE;
 }
 
 /*
@@ -303,6 +305,8 @@ STATE_BLOCKING_AND_SUSPENDED: Pool is a local state transition. No VM activities
 	default:
 		mono_fatal_with_history ("Cannot transition thread %p from %s with STATE_POLL", mono_thread_info_get_tid (info), state_name (cur_state));
 	}
+g_assert(0);
+		return SelfSuspendResumed; //We're fine, don't suspend
 }
 
 /*
@@ -403,6 +407,8 @@ If this turns to be a problem we should either implement [2] or make this an inv
 	default:
 		mono_fatal_with_history ("Cannot transition thread %p from %s with REQUEST_RESUME", mono_thread_info_get_tid (info), state_name (cur_state));
 	}
+	g_assert (0);
+			return ResumeError;
 }
 
 /*
@@ -439,6 +445,8 @@ STATE_BLOCKING: Async suspend only begins if a transition to async suspend reque
 	default:
 		mono_fatal_with_history ("Cannot transition thread %p from %s with FINISH_ASYNC_SUSPEND", mono_thread_info_get_tid (info), state_name (cur_state));
 	}
+g_assert(0);
+return FALSE;
 }
 
 /*
@@ -528,6 +536,8 @@ STATE_BLOCKING_AND_SUSPENDED: Blocking is not nestabled
 	default:
 		mono_fatal_with_history ("Cannot transition thread %p from %s with DO_BLOCKING", mono_thread_info_get_tid (info), state_name (cur_state));
 	}
+g_assert(0);
+		return DoBlockingPollAndRetry;
 }
 
 /*
@@ -576,6 +586,8 @@ STATE_BLOCKING_AND_SUSPENDED: This an exit state of done blocking
 	default:
 		mono_fatal_with_history ("Cannot transition thread %p from %s with DONE_BLOCKING", mono_thread_info_get_tid (info), state_name (cur_state));
 	}
+g_assert(0);
+			return DoneBlockingWait;
 }
 
 /*
@@ -626,6 +638,8 @@ STATE_BLOCKING_AND_SUSPENDED: This is an exit state of done blocking, can't happ
 	default:
 		mono_fatal_with_history ("Cannot transition thread %p from %s with DONE_BLOCKING", mono_thread_info_get_tid (info), state_name (cur_state));
 	}
+g_assert(0);
+			return AbortBlockingOkAndPool;
 }
 
 MonoThreadUnwindState*
